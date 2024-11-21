@@ -35,7 +35,7 @@ jobs:
         echo "Recebendo dados"
         curl -s "https://viacep.com.br/ws/03694000/json/" -o response.json
 
-    - name: Validar resposta sem jq
+    - name: Validar resposta
       run: |
         echo "Validação"
         if grep -q '"erro": true' response.json; then

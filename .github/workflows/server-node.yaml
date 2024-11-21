@@ -1,0 +1,50 @@
+name: ViaCep Projeto
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate-cep:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Criar ambiente Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Instalar dependências
+      run: npm install 
+
+    - name: Rodar app.js
+      run: |
+        echo "Rodando app.js"
+        node app.js
+
+    - name: Requisição 
+      run: |
+        echo "Recebendo dados"
+        curl -s "https://viacep.com.br/ws/03694000/json/" -o response.json
+
+    - name: Validar resposta sem jq
+      run: |
+        echo "Validação"
+        if grep -q '"erro": true' response.json; then
+          echo "CEP não encontrado"
+          exit 1
+        fi
+        echo "CEP encontrado"
+
+    - name: Exibir os dados
+      run: |
+        echo "Dados:"
+        cat response.json

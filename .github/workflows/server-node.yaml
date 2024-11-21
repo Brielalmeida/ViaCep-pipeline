@@ -3,11 +3,11 @@ name: ViaCep Projeto
 on:
   push:
     branches:
-      - main
+      - master
 
   pull_request:
     branches:
-      - main
+      - master
 
 jobs:
   validate-cep:
